@@ -1,0 +1,13 @@
+.env
+.env.local
+.env.*.local
+*.log
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+node_modules/
+target/
+dist/
+coverage/
+*.iml
