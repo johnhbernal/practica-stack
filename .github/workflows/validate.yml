@@ -1,0 +1,41 @@
+# Validates the compose contract without building images: CI checkouts do not have
+# the sibling repos (ms-auth / practica / ms-frontend), so `docker compose config`
+# is the honest gate here — it proves the file parses, the services exist and the
+# .env.example can drive the stack.
+
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare .env from the template
+        run: cp .env.example .env
+
+      - name: Compose file parses
+        run: docker compose config -q
+
+      - name: Four services are declared
+        run: |
+          services="$(docker compose config --services | tr -d '\r')"
+          echo "$services"
+          test "$(echo "$services" | wc -l)" -eq 4
+          for s in postgres ms-auth microservicio-practica ms-frontend; do
+            echo "$services" | grep -qx "$s"
+          done
+
+      - name: JWT secrets survive the >=32 byte fail-fast
+        run: |
+          for v in APP_JWT_SECRET_MASTER APP_JWT_SECRET_SESSION; do
+            value="$(grep "^$v=" .env.example | cut -d= -f2- | tr -d '\r')"
+            echo "$v length=${#value}"
+            test "${#value}" -ge 32
+          done

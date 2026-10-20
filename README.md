@@ -89,3 +89,17 @@ docker compose up --build -d --force-recreate ms-auth ms-frontend
 ## Frontend env (Vite)
 
 Build-time vars for `ms-frontend` Docker image: `VITE_AUTH_API_URL`, `VITE_PRACTICA_API_URL` (see `../ms-frontend/.env.example`).
+
+## Validate the compose contract (no images built)
+
+```powershell
+powershell -File scripts\validate-stack.ps1
+```
+
+Checks that the file parses, the four services are declared, both JWT secrets are ≥ 32 bytes
+(ms-auth fails fast below that) and, on a workstation, that the three sibling clones exist.
+`.github/workflows/validate.yml` runs the CI half (the siblings are not in a CI checkout).
+
+**Honest scope:** this proves the contract, not the stack. A green check does **not** mean the
+images build or that login works — that still needs `scripts\smoke-stack-docker.ps1` on a machine
+with Docker running.
