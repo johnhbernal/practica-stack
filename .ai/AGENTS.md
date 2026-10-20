@@ -57,3 +57,7 @@ Evidence: paths / comandos
 ## Cómo invocar el consejo
 
 En Cursor: pedir «valida con el consejo Practica» → fan-out Security + Spring + React/UX + Playwright/DevOps en paralelo → síntesis con veredicto global.
+
+## Piso transversal
+
+Skill personal `redtic-software-practices` ([Red-TIC UNAM](https://www.red-tic.unam.mx/desarrollo-de-software)) — req → diseño → construcción → QA → release → config. No sustituye las fichas de este repo.
